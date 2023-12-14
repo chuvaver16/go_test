@@ -5,11 +5,12 @@ import "fmt"
 var fibs = make(map[uint]uint64)
 
 func Fibonacci(n uint) uint64 {
+
+	var fib uint64
+
 	if fibs[n] != 0 {
 		return fibs[n]
 	}
-
-	var fib uint64
 
 	if n == 1 {
 		fib = 0
