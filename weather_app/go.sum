@@ -1,3 +1,5 @@
+github.com/abrander/gowasm-geolocation v0.0.0-20201220170220-d75ac79fbc4b h1:zcoq/f/hWzBpr1NAaHQoraplLobrF5Fc3v1bM0Tw7iU=
+github.com/abrander/gowasm-geolocation v0.0.0-20201220170220-d75ac79fbc4b/go.mod h1:GMM1mkDVFCXkyXfZdei52c4TL0xSNps1jBfPIPqKCX8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/labstack/echo/v4 v4.11.3 h1:Upyu3olaqSHkCjs1EJJwQ3WId8b8b1hxbogyommKktM=

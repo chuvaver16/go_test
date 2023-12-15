@@ -3,6 +3,7 @@ module weather_app
 go 1.21
 
 require (
+	github.com/abrander/gowasm-geolocation v0.0.0-20201220170220-d75ac79fbc4b // indirect
 	github.com/labstack/echo/v4 v4.11.3 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

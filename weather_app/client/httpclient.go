@@ -23,7 +23,7 @@ func Get(uri string, qparams map[string]string) ([]byte, error) {
 
 	req.URL.RawQuery = q.Encode()
 
-	log.Println(req.URL.String())
+	//log.Print(req.URL.String())
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -38,7 +38,7 @@ func Get(uri string, qparams map[string]string) ([]byte, error) {
 		return nil, err
 	}
 
-	log.Println(string(body))
+	//log.Print(string(body))
 
 	return body, nil
 }
