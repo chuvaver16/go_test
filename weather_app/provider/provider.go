@@ -12,19 +12,29 @@ type Weather struct {
 	Temp float64
 }
 
-type IProvider interface {
+type IWeatherProvider interface {
 	GetCoordinate(city string) (*GeoLocation, error)
 	GetWeatherByGeo(geo *GeoLocation) (*Weather, error)
 	GetWeatherByCity(city string) (*Weather, error)
 }
 
-type Provider struct {
+type WeatherProvider struct {
 	UriGeo     string
 	UriWeather string
 	ApiKey     string
 }
 
-func InitProviders() map[string]IProvider {
+type IGeoProvider interface {
+	GetCoordinate(ip string) (*GeoLocation, error)
+}
+
+type GeoProvider struct {
+	UriGeo     string
+	UriWeather string
+	ApiKey     string
+}
+
+func InitWeatherProviders() map[string]IWeatherProvider {
 
 	owm := new(OWM)
 	owm.UriGeo = os.Getenv("OWM_URI_GEO")
@@ -35,10 +45,18 @@ func InitProviders() map[string]IProvider {
 	om.UriGeo = os.Getenv("OPENMETEO_URI_GEO")
 	om.UriWeather = os.Getenv("OPENMETEO_URI_WEATHER")
 
-	providers := map[string]IProvider{
+	providers := map[string]IWeatherProvider{
 		"OpenMeteo": om,
 		"OWM":       owm,
 	}
 
 	return providers
+}
+
+func InitGeoProvider() IGeoProvider {
+
+	ipapi := new(IPApi)
+	ipapi.UriGeo = os.Getenv("IPAPI_URI_GEO")
+
+	return ipapi
 }

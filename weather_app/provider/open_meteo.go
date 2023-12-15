@@ -2,13 +2,14 @@ package provider
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"weather_app/client"
 )
 
 type OpenMeteo struct {
-	Provider
+	WeatherProvider
 }
 
 type OpenMeteoGeoResponse struct {
@@ -61,7 +62,7 @@ func (om *OpenMeteo) GetCoordinate(city string) (*GeoLocation, error) {
 		"name": city,
 	}
 
-	body, err := client.Get(om.UriGeo, qparams)
+	body, err := client.Get(om.UriGeo, qparams, nil)
 	if err != nil {
 		log.Print(err)
 		return nil, err
@@ -73,13 +74,18 @@ func (om *OpenMeteo) GetCoordinate(city string) (*GeoLocation, error) {
 		return nil, err
 	}
 
-	geo := &GeoLocation{
-		City: data.Results[0].Name,
-		Lat:  data.Results[0].Latitude,
-		Lon:  data.Results[0].Longitude,
+	if data.Results != nil {
+		geo := &GeoLocation{
+			City: data.Results[0].Name,
+			Lat:  data.Results[0].Latitude,
+			Lon:  data.Results[0].Longitude,
+		}
+
+		return geo, nil
 	}
 
-	return geo, nil
+	return nil, errors.New("Service is wrong")
+
 }
 
 func (om *OpenMeteo) GetWeatherByGeo(geo *GeoLocation) (*Weather, error) {
@@ -90,7 +96,7 @@ func (om *OpenMeteo) GetWeatherByGeo(geo *GeoLocation) (*Weather, error) {
 		"current":   "temperature_2m",
 	}
 
-	body, err := client.Get(om.UriWeather, qparams)
+	body, err := client.Get(om.UriWeather, qparams, nil)
 	if err != nil {
 		log.Print(err)
 		return nil, err
@@ -105,8 +111,8 @@ func (om *OpenMeteo) GetWeatherByGeo(geo *GeoLocation) (*Weather, error) {
 	weather := &Weather{
 		Temp: data.Current.Temperature2M,
 	}
-
 	return weather, nil
+
 }
 
 func (om *OpenMeteo) GetWeatherByCity(city string) (*Weather, error) {

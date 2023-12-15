@@ -8,7 +8,7 @@ import (
 )
 
 type OWM struct {
-	Provider
+	WeatherProvider
 }
 
 type OWMGeoResponse []struct {
@@ -53,7 +53,7 @@ func (owm *OWM) GetCoordinate(city string) (*GeoLocation, error) {
 		"appid": owm.ApiKey,
 	}
 
-	body, err := client.Get(owm.UriGeo, qparams)
+	body, err := client.Get(owm.UriGeo, qparams, nil)
 	if err != nil {
 		log.Print(err)
 		return nil, err
@@ -83,7 +83,7 @@ func (owm *OWM) GetWeatherByGeo(geo *GeoLocation) (*Weather, error) {
 		"units": "metric",
 	}
 
-	body, err := client.Get(owm.UriWeather, qparams)
+	body, err := client.Get(owm.UriWeather, qparams, nil)
 	if err != nil {
 		log.Print(err)
 		return nil, err
