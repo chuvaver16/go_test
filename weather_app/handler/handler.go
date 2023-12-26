@@ -14,7 +14,6 @@ type TemplateRegistry struct {
 	Templates map[string]*template.Template
 }
 
-// Implement e.Renderer interface
 func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	tmpl, ok := t.Templates[name]
 	if !ok {

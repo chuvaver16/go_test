@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"weather_app/client"
@@ -30,8 +31,9 @@ func (api *API) GetWeather(c echo.Context) error {
 
 	log.Println(city)
 
-	body := map[string]interface{}{}
-	body["city"] = city
+	body := map[string]interface{}{
+		"city": city,
+	}
 
 	if city == "" {
 		ip := client.GetLocalIP()
@@ -39,25 +41,22 @@ func (api *API) GetWeather(c echo.Context) error {
 		data, err := api.GeoProvider.GetCoordinate(ip)
 		if err != nil {
 			log.Print(err)
-		}
-		if data == nil || data.City == "" {
-			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-				"status": "error",
-			})
+			body["error"] = err
+			return c.JSON(http.StatusInternalServerError, body)
+		} else if data == nil || data.City == "" {
+			body["error"] = errors.New("City is not detected")
+			return c.JSON(http.StatusInternalServerError, body)
 		} else {
 			city = data.City
+			body["city"] = city
 		}
-
-		//log.Print(data)
 	}
 
 	for name, p := range api.WeatherProviders {
 		data, err := p.GetWeatherByCity(city)
 		if err != nil {
 			log.Print(err)
-			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-				"status": "error",
-			})
+			return c.JSON(http.StatusInternalServerError, body)
 		}
 		body[name] = data
 	}

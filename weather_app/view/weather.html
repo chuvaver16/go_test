@@ -22,13 +22,12 @@
 
   <br/>
 
-  <pre id="form-result"></pre>
+  <pre id="error"></pre>
 
   <script type="text/javascript">
-    // Send a ajax request when the submit button is clicked
+
     $("#submit-btn").on("click", function(){
       var city = $("#city").val();
-
 
       $.ajax({
         type: "GET",
@@ -37,10 +36,13 @@
         function(data){
           $("#OpenMeteo").text("OpenMeteo : " + data.OpenMeteo.Temp);
           $("#OWM").text("OWM : " + data.OWM.Temp);
+          $("#error").text("")
         }
       ).fail(
         function(data){
-          $("#OpenMeteo").text(data.status);
+          $("#OpenMeteo").text("");
+          $("#OWM").text("");
+          $("#error").text("Error : " + data.error);
         }
       )
     });
