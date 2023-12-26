@@ -20,11 +20,12 @@ func main() {
 
 	e := echo.New()
 
-	api := api.New()
-
+	// View
 	e.Renderer = handler.InitTemplates()
-
 	e.GET("/", handler.MainHandler)
+
+	// Api
+	api := api.New()
 	e.GET("/api/weather/", api.GetWeather)
 	e.GET("/api/weather/:city", api.GetWeather)
 
