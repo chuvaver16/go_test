@@ -56,8 +56,6 @@ func Unpacked(str string) (string, error) {
 
 		if unicode.IsDigit(curr_rune) && prev_rune != rune('\\') {
 			r := []rune(strings.Repeat(string(prev_rune), int(curr_rune-'0')))
-			//fmt.Println("Add 3")
-			//fmt.Println(string(r))
 
 			res = append(res, r...)
 		}
