@@ -1,0 +1,50 @@
+
+{{define "title"}}
+ Weather Test 
+{{end}}
+
+{{define "body"}}
+
+  <!-- HTML form -->
+  <form id="weather-form">
+    
+    <input type="text" id="city" placeholder="City">
+    <button type="button" id="submit-btn">Show me weather!</button>
+  </form>
+
+  <br/>
+
+  <h2> Results </h2>
+  <form id="weather-response">
+    <pre id="OWM"></pre>
+    <pre id="OpenMeteo"></pre>
+  </form>
+
+  <br/>
+
+  <pre id="error"></pre>
+
+  <script type="text/javascript">
+
+    $("#submit-btn").on("click", function(){
+      var city = $("#city").val();
+
+      $.ajax({
+        type: "GET",
+        url: "/api/weather/" + city
+      }).done(
+        function(data){
+          $("#OpenMeteo").text("OpenMeteo : " + data.OpenMeteo.Temp);
+          $("#OWM").text("OWM : " + data.OWM.Temp);
+          $("#error").text("")
+        }
+      ).fail(
+        function(data){
+          $("#OpenMeteo").text("");
+          $("#OWM").text("");
+          $("#error").text("Error : " + data.error);
+        }
+      )
+    });
+  </script>
+{{end}}

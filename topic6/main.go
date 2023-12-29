@@ -26,8 +26,8 @@ func Unpacked(str string) (string, error) {
 			next_rune = runes[i+1]
 		}
 
-		fmt.Printf("[i = %d] [prev = %s] [curr = %s] [next = %s] [is_slash = %t]\n",
-			i, string(prev_rune), string(curr_rune), string(next_rune), is_slash)
+		fmt.Printf("[i = %d] [prev = %s] [curr = %s] [next = %s] [is_slash = %t] => %s\n",
+			i, string(prev_rune), string(curr_rune), string(next_rune), is_slash, string(res))
 
 		if curr_rune == rune('\\') {
 
@@ -41,11 +41,13 @@ func Unpacked(str string) (string, error) {
 
 		if is_slash {
 			//mt.Println("Add 1")
-			res = append(res, prev_rune)
+			if !unicode.IsDigit(prev_rune) {
+				res = append(res, prev_rune)
 
-			if i == n-1 {
-				//fmt.Println("Add 2")
-				res = append(res, curr_rune)
+				if i == n-1 {
+					//fmt.Println("Add 2")
+					res = append(res, curr_rune)
+				}
 			}
 
 			prev_rune = curr_rune
@@ -56,20 +58,16 @@ func Unpacked(str string) (string, error) {
 
 		if unicode.IsDigit(curr_rune) && prev_rune != rune('\\') {
 			r := []rune(strings.Repeat(string(prev_rune), int(curr_rune-'0')))
-			//fmt.Println("Add 3")
-			//fmt.Println(string(r))
 
 			res = append(res, r...)
-		}
-
-		if !unicode.IsDigit(prev_rune) {
+		} else if !unicode.IsDigit(prev_rune) {
 			//fmt.Println("Add 4")
 			res = append(res, prev_rune)
-		}
 
-		if i == n-1 {
-			//fmt.Println("Add 5")
-			res = append(res, curr_rune)
+			if i == n-1 {
+				//fmt.Println("Add 5")
+				res = append(res, curr_rune)
+			}
 		}
 
 		prev_rune = curr_rune
@@ -80,8 +78,11 @@ func Unpacked(str string) (string, error) {
 
 func main() {
 
-	str := `q1w2e3\45`
-	res, _ := Unpacked(str)
+	str1 := `q1w2e3\45`
+	res1, _ := Unpacked(str1)
+	fmt.Println(str1, " -> ", res1)
 
-	fmt.Println(str, " -> ", string(res))
+	str2 := `q\1\2w2e3\45`
+	res2, _ := Unpacked(str2)
+	fmt.Println(str2, " -> ", res2)
 }
